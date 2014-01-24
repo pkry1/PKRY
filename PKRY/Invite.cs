@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 
 namespace PKRY
 {
-    public partial class Register : Form
+    public partial class Invite : Form
     {
         RSACryptoServiceProvider RSAregister;
 
@@ -20,7 +20,7 @@ namespace PKRY
         public string userLogin;
 
         // Wczytuje klucz pub serwera i priv klienta
-        public Register(string c, string a, string b)
+        public Invite(string c, string a, string b)
         {
             InitializeComponent();
             ServerPubKey = a;

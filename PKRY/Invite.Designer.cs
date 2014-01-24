@@ -1,6 +1,6 @@
 ﻿namespace PKRY
 {
-    partial class Register
+    partial class Invite
     {
         /// <summary>
         /// Required designer variable.
@@ -75,11 +75,11 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
-            this.button1.Text = "REGISTER";
+            this.button1.Text = "INVITE";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // Register
+            // Invite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,8 +90,8 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Name = "Register";
-            this.Text = "Recommend";
+            this.Name = "Invite";
+            this.Text = "Invite a friend";
             this.ResumeLayout(false);
             this.PerformLayout();
 

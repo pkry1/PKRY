@@ -86,7 +86,7 @@ namespace PKRY
         // Uruchamia okienka rekomendacji
         private void button1_Click(object sender, EventArgs e)
         {
-            Register register = new Register(userLogin, ServerPubKey, PrivateKey);
+            Invite register = new Invite(userLogin, ServerPubKey, PrivateKey);
         }
 
 

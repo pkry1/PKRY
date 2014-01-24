@@ -44,11 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Register.cs">
+    <Compile Include="Invite.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Register.Designer.cs">
-      <DependentUpon>Register.cs</DependentUpon>
+    <Compile Include="Invite.Designer.cs">
+      <DependentUpon>Invite.cs</DependentUpon>
     </Compile>
     <Compile Include="MainFrame.cs">
       <SubType>Form</SubType>
@@ -71,8 +71,8 @@
     <Compile Include="ServerGUI.Designer.cs">
       <DependentUpon>ServerGUI.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Register.resx">
-      <DependentUpon>Register.cs</DependentUpon>
+    <EmbeddedResource Include="Invite.resx">
+      <DependentUpon>Invite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
