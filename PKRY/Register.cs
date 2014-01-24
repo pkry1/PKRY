@@ -19,6 +19,7 @@ namespace PKRY
         private string PrivateKey;
         public string userLogin;
 
+        // Wczytuje klucz pub serwera i priv klienta
         public Register(string c, string a, string b)
         {
             InitializeComponent();
@@ -30,18 +31,18 @@ namespace PKRY
             Show();
         }
 
-
+        
         private void button1_Click(object sender, EventArgs e)
         {
             SendToServer();
         }
 
+        // Szyfruje i wysyla dane do serwera, uaktualnia 
         private void SendToServer()
         {
             System.Text.Encoding encoding = System.Text.Encoding.ASCII;
             Server.server.NewClientRequest(RSAregister.Encrypt(encoding.GetBytes(textBox1.Text), false), RSAregister.Encrypt(encoding.GetBytes(Server.GetHash(textBox2.Text)), false), RSAregister.Encrypt(encoding.GetBytes(userLogin), false));
             Server.server.RegisterClient();
-            Server.server.UpdatePrices();
             this.Hide();
         }
     }

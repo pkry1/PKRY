@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using PKRY;
 using System.IO;
+using System.Windows.Forms;
 
 namespace PKRY
 {
@@ -31,7 +32,7 @@ namespace PKRY
         public Dictionary<string, int> recom = new Dictionary<string, int>();
         public Dictionary<string, double> spent = new Dictionary<string, double>();
 
-
+        //generuje klucze priv i pub serwera, ustala standardowe ceny
         public Server() 
         {
             server = this;
@@ -47,6 +48,7 @@ namespace PKRY
             prices[5] = 450;
         }
         
+        // Autoryzuje klienta
         public MainFrame Logging(Login login)
         {
             if (dict.ContainsKey(userLogin) )
@@ -71,6 +73,7 @@ namespace PKRY
             return mainFrame;
         }
 
+        // Generacja kluczy
         public void CipherGen()
         {
             RSAserver = new RSACryptoServiceProvider(1024);
@@ -78,11 +81,13 @@ namespace PKRY
             PublicKey = RSAserver.ToXmlString(false);
         }
 
+        // Ujawnia formularz logowania
         public void action(MainFrame x)
         {
             x.Show();
         }
 
+        // Oblicza skrot hasel wczytywanych do bazy klientow z pliku tekstowego
         public static string GetHash(string text)
         {
             string hash = "";
@@ -92,6 +97,7 @@ namespace PKRY
             return hash;
         }
 
+        // Wczytuje plik do pamieci
         public void Loadfile()
         {
             try
@@ -108,6 +114,7 @@ namespace PKRY
             }
         }
 
+        // Zczytuje kolejne linie z pliku
         private void ReadFromFile(StreamReader sr)
         {
             while (true)
@@ -119,6 +126,7 @@ namespace PKRY
             }
         }
 
+        // Oddziela login i haslo z wczytanej linii dodaje nowego klienta
         public void HandleLine(string line)
         {
             string[] splitted;
@@ -127,6 +135,7 @@ namespace PKRY
             
         }
 
+        // Przyjecie zaszyfrowanych danych i ich zdeszyfrowanie
         public void ReceiveData(byte[] encrypted, byte[] encrypted2)
         {
             RSAserver.FromXmlString(PrivateKey);
@@ -135,6 +144,7 @@ namespace PKRY
             password = new string(encoding.GetChars(RSAserver.Decrypt(encrypted2, false)));
         }
 
+        // Przyjecie zaszyfrowanych danych dotyczacych rekomendowanych klientow i ich zdeszyfrowanie
         public void NewClientRequest(byte[] encrypted, byte[] encrypted2, byte[] encrypted3)
         {
             System.Text.Encoding encoding = System.Text.Encoding.ASCII;
@@ -144,15 +154,24 @@ namespace PKRY
             recommending = new string(encoding.GetChars(RSAserver.Decrypt(encrypted3, false)));
         }
 
+        // Sprawdza czy rekomendowany klient znajduje sie w bazie klientow, jesli nie to go dodaje. Dopisuje rekomendacje na konto obecnie zalogowanego klienta
         public void RegisterClient()
         {
-            dict.Add(newUserLogin, newUserPass);
-            recom.Add(newUserLogin, 0);
-            spent.Add(newUserLogin, 0);
-            int x = recom[userLogin];
-            recom[userLogin] = x + 1;
+            if (dict.ContainsKey(newUserLogin))
+            {
+                MessageBox.Show("User already exists", "Error",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                AddClient(newUserLogin, newUserPass);
+                int x = recom[userLogin];
+                recom[userLogin] = x + 1;
+                UpdatePrices(); 
+            }
         }
 
+        // Dodaje klienta do bazy danych
         public void AddClient(string a, string b)
         {
             dict.Add(a, GetHash(b));
@@ -160,6 +179,7 @@ namespace PKRY
             spent.Add(a, 0);
         }
 
+        // Usuwa klienta
         public void RemoveClient(string a)
         {
             dict.Remove(a);
@@ -167,6 +187,7 @@ namespace PKRY
             spent.Remove(a);
         }
 
+        // Dodaje kwote obecnego zamowienia do sumy wszystkich zamowien
         public void AddSpent(byte[] encrypted, byte[] encrypted2)
         {
             System.Text.Encoding encoding = System.Text.Encoding.ASCII;
@@ -176,6 +197,7 @@ namespace PKRY
             spent[userLogin] = x + Convert.ToDouble(new string(encoding.GetChars(RSAserver.Decrypt(encrypted, false))));
         }
 
+        // Uaktualnia ceny uwzgledniajac reputacje klienta
         public void UpdatePrices()
         {
             double x = new double();
@@ -204,6 +226,7 @@ namespace PKRY
             ResetPrices();
         }
 
+        // Ustawia standardowe ceny
         public void ResetPrices()
         {
             prices[0] = 500;

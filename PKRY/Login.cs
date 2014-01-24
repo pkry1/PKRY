@@ -19,7 +19,7 @@ namespace PKRY
         public string ServerPubKey;
         private string PrivateKey;
 
-
+        // Uruchamia formularz i kaze generowac klucz prywatny i publiczny klienta
         public Login()
         {
             InitializeComponent();
@@ -28,14 +28,15 @@ namespace PKRY
             CipherGen();
         }
 
-
+        // Kaze wyslac na serwer login i haslo, uruchamia funkcje weryfikacji klienta na serwerze
         private void button1_Click(object sender, EventArgs e)
         {
             SendToServer(textBox1.Text, textBox2.Text);
             server.Logging(this);
-          //  server.UpdatePrices();
         }
 
+
+        // Generuje klucz prywatny i publiczny klienta i dodatkowo ozapisuje klucz publiczny serwera
         public void CipherGen()
         {
             RSAclient = new RSACryptoServiceProvider(1024);
@@ -46,10 +47,10 @@ namespace PKRY
         }
 
 
+        // Procedura logowania, wyswietla status weryfikacji klienta przez serwer
         public MainFrame Logging()
         {
             MainFrame mainFrame = new MainFrame(textBox1.Text, ServerPubKey, PrivateKey);
-           // server.UpdatePrices();
             if (server.status == "Connected")
             {
                 this.label3.Text = "Connected";
@@ -67,11 +68,19 @@ namespace PKRY
             return mainFrame;
         }
 
+        // Szyfruje i wysyla dane logowania na serwer, haslo dodatkowo skraca
         public void SendToServer(string a, string b)
         {
             System.Text.Encoding encoding = System.Text.Encoding.ASCII;
             RSAclient.FromXmlString(ServerPubKey);
             server.ReceiveData(RSAclient.Encrypt(encoding.GetBytes(a), false), RSAclient.Encrypt(encoding.GetBytes(Server.GetHash(b)), false));
         }
+
+        private void Login_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
+
+
     }
 }

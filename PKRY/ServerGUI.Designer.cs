@@ -145,8 +145,9 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "ServerGUI";
-            this.Text = "ServerGUI";
+            this.Text = "Manager";
             this.Load += new System.EventHandler(this.ServerGUI_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

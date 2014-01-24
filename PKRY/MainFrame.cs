@@ -21,6 +21,8 @@ namespace PKRY
 
         RSACryptoServiceProvider RSAmainFrame;
 
+
+        // Wczytuje klucz pub serwera i priv klienta - dostaje je od klasy Login
         public MainFrame(string y, string a, string b)
         {
             InitializeComponent();
@@ -32,23 +34,20 @@ namespace PKRY
             
         }
 
+        // Przypisuje klucz prywatny klienta
         public void loadKey(string privKey)
         {
             PrivateKey = privKey;
         }
 
+        // Zamyka okienko kupowania i otwiera okno logowania
         private void MainFrame_FormClosed(object sender, FormClosedEventArgs e)
         {
             Login login = new Login();
             Server.server.ResetPrices();
-            //label18.Text = new string(encoding.GetChars(RSAmainFrame.Decrypt(encrypted, false)));
-            //label19.Text = new string(encoding.GetChars(RSAmainFrame.Decrypt(encrypted2, false)));
-            //label20.Text = new string(encoding.GetChars(RSAmainFrame.Decrypt(encrypted3, false)));
-            //label21.Text = new string(encoding.GetChars(RSAmainFrame.Decrypt(encrypted4, false)));
-            //label22.Text = new string(encoding.GetChars(RSAmainFrame.Decrypt(encrypted5, false)));
-            //label23.Text = new string(encoding.GetChars(RSAmainFrame.Decrypt(encrypted6, false)));
         }
 
+        // Dodaje sumy wszystkich produktow wymnozone razy ich ilosc
         public void sumUp()
         {
             label24.Text = Convert.ToString(numericUpDown1.Value * Convert.ToDecimal(label18.Text) + numericUpDown2.Value * Convert.ToDecimal(label19.Text) + numericUpDown3.Value * Convert.ToDecimal(label20.Text) + numericUpDown4.Value * Convert.ToDecimal(label21.Text) + numericUpDown5.Value * Convert.ToDecimal(label22.Text) + numericUpDown6.Value * Convert.ToDecimal(label23.Text));
@@ -84,11 +83,14 @@ namespace PKRY
             sumUp();
         }
 
+        // Uruchamia okienka rekomendacji
         private void button1_Click(object sender, EventArgs e)
         {
             Register register = new Register(userLogin, ServerPubKey, PrivateKey);
         }
 
+
+        // Wysyla kwote zamowienia na serwera i kaze mu zauktualizowac ceny, ustawia numericUpDown na 0
         private void button2_Click(object sender, EventArgs e)
         {
             sum = Convert.ToDouble(label24.Text);
@@ -103,6 +105,8 @@ namespace PKRY
             sumUp();
         }
 
+
+        // Wysyla na serwer zaszyfrowane dane dotyczace kwoty zamowienia i kaze je doliczyc do ogolnej sumy zamowien
         private void SendToServer(double x)
         {
             System.Text.Encoding encoding = System.Text.Encoding.ASCII;
@@ -110,6 +114,8 @@ namespace PKRY
             Server.server.AddSpent(RSAmainFrame.Encrypt(encoding.GetBytes(Convert.ToString(x)), false), RSAmainFrame.Encrypt(encoding.GetBytes(userLogin), false));
         }
 
+
+        // Odszyfrowuje i wczytuje ceny otrzymane z serwera
         public void LoadPrices(byte [] encrypted, byte [] encrypted2, byte [] encrypted3, byte [] encrypted4, byte [] encrypted5, byte [] encrypted6)
         {
             System.Text.Encoding encoding = System.Text.Encoding.ASCII;
